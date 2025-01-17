@@ -39,6 +39,5 @@ export class CreateMovieDto {
   title: string;
 
   @IsNotEmpty()
-  @IsPassWordValid()
   genre: string;
 }

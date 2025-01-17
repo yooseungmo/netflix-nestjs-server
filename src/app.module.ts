@@ -5,6 +5,7 @@ import { MovieModule } from './movie/movie.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
+import { Movie } from './movie/entities/movie.entity';
 
 @Module({
   imports: [
@@ -30,12 +31,17 @@ import * as Joi from 'joi';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [],
+        entities: [Movie],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    //   synchronize: true, // 이거 prod 에서는 절떄 true ㄴㄴ
+    /** 
+      synchronize: true, 
+      이거 prod 에서는 절떄 true ㄴㄴ
+      TypeORM 설정에 따라 데이터베이스 테이블과 컬럼이 자동으로 생성되거나 수정돼.
+    */
+
     MovieModule,
   ],
   controllers: [AppController],
