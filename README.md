@@ -1,85 +1,161 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Netflix-NestJS-Server
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+> **NestJS**를 활용해 넷플릭스 서버의 주요 기능을 구현한 프로젝트입니다.  
+> 인증, 실시간 채팅, 캐싱, Task 스케쥴링, CI/CD 파이프라인 등을 포함한 NestJS의 주요 개념과 자주 쓰이는 외부 라이브러리를 학습하기 위해 설계되었습니다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+## 주요 기능 (Key Features)
 
-```bash
-$ npm install
+1. **인증 및 권한 관리**  
+   - JWT 기반 토큰 인증 및 세션 인증 지원  
+   - Role-Based Access Control(관리자, 사용자 등)
+
+2. **영화(영상) 업로드 & 인코딩**  
+   - 대용량 파일 업로드를 위한 Presigned URL 활용  
+   - Bull/BullMQ 등 큐(Queue) 기반 인코딩 처리로 서버 부하 최소화
+
+3. **실시간 채팅**  
+   - WebSocket (Socket.IO)을 사용한 실시간 채팅 기능  
+   - 고객지원 및 사용자 간 채팅을 빠르고 안정적으로 제공
+
+4. **캐싱**  
+   - Redis를 통한 인기 동영상 목록 등 자주 조회되는 데이터 캐싱  
+   - API 성능 최적화 및 DB 부하 감소
+
+5. **스케줄링 & 태스크**  
+   - 일정 주기로 실행되는 Cron 작업  
+   - Queue를 통한 비동기 태스크 처리 (인코딩, 알림 등)
+
+6. **로그 관리 & 모니터링**  
+   - Winston, Pino 등을 사용한 통합 로깅  
+   - 중요 이벤트, 에러 모니터링 및 알림 설정(예: Slack, Email 등)
+
+7. **CI/CD & 배포**  
+   - GitHub Actions로 CI/CD 파이프라인 구성  
+   - Docker 기반 컨테이너 이미지 빌드/배포  
+   - AWS(ECS, ECR, S3 등)을 활용한 클라우드 환경 배포
+
+8. **테스트 코드 & 문서화**  
+   - Jest를 통한 단위/통합 테스트  
+   - Swagger 등을 활용한 API 문서화
+
+---
+
+## 기술 스택 (Tech Stack)
+
+| 분야               | 상세 내용                                               |
+|-------------------|---------------------------------------------------------|
+| **Framework**       | [NestJS](https://nestjs.com/)                          |
+| **Language**        | TypeScript                                             |
+| **Database**        | PostgreSQL (TypeORM & Prisma), MongoDB (Mongoose)      |
+| **ORM**             | TypeORM 또는 Prisma                                    |
+| **Caching & Queue** | [Redis](https://redis.io/) + Bull/BullMQ (큐 처리)     |
+| **File Storage**    | AWS S3 (using Presigned URLs)                          |
+| **Logging**         | [Winston](https://github.com/winstonjs/winston), Pino  |
+| **Testing**         | [Jest](https://jestjs.io/) (Unit, Integration, E2E), SuperTest |
+| **Deployment & CI/CD** | AWS (EC2, S3, RDS, Elastic Beanstalk), Docker, GitHub Actions 등 |
+| **Real-Time**       | WebSocket (Socket.IO)                                  |
+
+---
+
+## 프로젝트 구조 (Project Structure)
+
+```plaintext
+Netflix-NestJS-Server
+├── src
+│   ├── auth          # 인증/인가 관련 모듈 (JWT, 세션, RBAC 등)
+│   ├── movies        # 영화/영상 관련 모듈 (인코딩, 업로드, 큐 처리 등)
+│   ├── chats         # 실시간 채팅 모듈 (WebSocket/Socket.IO)
+│   ├── caching       # Redis 캐싱 로직
+│   ├── tasks         # 스케줄링 및 태스크 처리 (Bull/BullMQ)
+│   ├── logs          # 로그 설정 관련 (Winston, Pino)
+│   ├── common        # 공통 유틸, 인터셉터, 필터, 데코레이터 등
+│   ├── app.module.ts # 메인 애플리케이션 모듈
+│   └── main.ts       # 엔트리 포인트
+├── test              # 테스트 코드 (Jest)
+├── scripts           # 배포, 마이그레이션 스크립트
+├── docker-compose.yml
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-## Compile and run the project
+---
 
+## AWS 아키텍처 (AWS Architecture)
+
+![AWS Architecture](./images/aws-architecture.png)
+
+### 설명
+1. **Route 53**: 도메인 관리 및 로드 밸런싱  
+2. **Elastic Load Balancer (ELB)**: 트래픽 분산 처리  
+3. **Elastic Beanstalk**: 애플리케이션 배포 및 관리  
+4. **EC2 Autoscaling**: 동적 인스턴스 확장  
+5. **S3**: 정적 파일 저장 (영상, 이미지 등)  
+6. **Redis**: 데이터 캐싱  
+7. **RDS**: PostgreSQL 데이터베이스 관리  
+8. **CloudWatch**: 로깅 및 모니터링  
+
+---
+
+## 설치 및 실행 (Installation & Usage)
+
+### Requirements
+- **Node.js** (v20+)
+- **PostgreSQL** & **Redis**
+- **AWS CLI**
+
+### Steps
+
+1. **프로젝트 클론**  
+   ```bash
+   git clone https://github.com/yooseungmo/netflix-nestjs-server.git 
+   cd netflix-nestjs-server
+   ```
+
+2. **의존성 설치 및 서버 실행**  
+   ```bash
+   npm install # 패키지 설치
+   docker-compose up -d # Redis 및 PostgreSQL 실행
+   npm run start:dev # 개발 서버 실행
+   ```
+
+3. **테스트 실행**  
+   ```bash
+   npm run test # 단위 테스트
+   npm run test:e2e # 통합 테스트
+   npm run test:cov # 테스트 커버리지 확인
+   ```
+
+---
+
+## 테스트 (Testing)
+
+### Commands
 ```bash
-# development
-$ npm run start
+# Unit tests
+npm run test
 
-# watch mode
-$ npm run start:dev
+# E2E tests
+npm run test:e2e
 
-# production mode
-$ npm run start:prod
+# Test coverage
+npm run test:cov
 ```
 
-## Run tests
+---
 
-```bash
-# unit tests
-$ npm run test
+## 라이선스 (License)
 
-# e2e tests
-$ npm run test:e2e
+이 프로젝트는 [MIT License](./LICENSE)에 따라 자유롭게 사용 가능합니다.
 
-# test coverage
-$ npm run test:cov
-```
+---
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### 추가로 고려할 사항 (Additional Features to Consider)
+- **Rate Limiting**: API 남용 방지
+- **Custom Error Handling**: 통일된 에러 응답 포맷 제공
+- **Container Orchestration**: Kubernetes (K8s)를 통한 고급 스케일링 및 관리
