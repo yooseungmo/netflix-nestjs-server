@@ -88,7 +88,7 @@ Netflix-NestJS-Server
 
 ## AWS 아키텍처 (AWS Architecture)
 
-![AWS Architecture](./images/aws-architecture.png)
+![Image](https://github.com/user-attachments/assets/1818d294-08d5-4f65-9f4f-8ae544162940)
 
 ### 설명
 1. **Route 53**: 도메인 관리 및 로드 밸런싱  
@@ -154,8 +154,3 @@ npm run test:cov
 이 프로젝트는 [MIT License](./LICENSE)에 따라 자유롭게 사용 가능합니다.
 
 ---
-
-### 추가로 고려할 사항 (Additional Features to Consider)
-- **Rate Limiting**: API 남용 방지
-- **Custom Error Handling**: 통일된 에러 응답 포맷 제공
-- **Container Orchestration**: Kubernetes (K8s)를 통한 고급 스케일링 및 관리
