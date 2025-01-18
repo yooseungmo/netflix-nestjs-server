@@ -1,18 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  ClassSerializerInterceptor,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
   UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { MovieService } from './movie.service';
 
 @Controller('/movie')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -23,22 +23,22 @@ export class MovieController {
 
   @Get()
   getMovies(@Query('title') title?: string) {
-    return this.movieService.getManyMovies(title);
+    return this.movieService.findAll(title);
   }
 
   @Get(':id')
   getMovie(@Param('id') id: string) {
-    return this.movieService.getMovieById(+id);
+    return this.movieService.findOne(+id);
   }
 
   @Post()
   postMovie(@Body() dto: CreateMovieDto) {
-    return this.movieService.createMovie(dto);
+    return this.movieService.create(dto);
   }
 
   @Patch(':id')
   patchMovie(@Param('id') id: string, @Body() dto: UpdateMovieDto) {
-    return this.movieService.updateMovie(+id, dto);
+    return this.movieService.update(+id, dto);
   }
 
   @Delete(':id')

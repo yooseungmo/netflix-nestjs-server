@@ -1,5 +1,9 @@
 import {
+  ArrayNotEmpty,
+  IsArray,
   IsNotEmpty,
+  IsNumber,
+  IsString,
   registerDecorator,
   ValidationArguments,
   ValidationOptions,
@@ -36,8 +40,25 @@ function IsPassWordValid(validationOptions?: ValidationOptions) {
 
 export class CreateMovieDto {
   @IsNotEmpty()
+  @IsString()
   title: string;
 
   @IsNotEmpty()
-  genre: string;
+  @IsString()
+  detail: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  directorId: number;
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsNumber(
+    {},
+    {
+      // 배열 내부 값들 number 맞는지 체크
+      each: true,
+    },
+  )
+  genreIds: number[];
 }

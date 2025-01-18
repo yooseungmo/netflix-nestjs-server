@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MovieModule } from './movie/movie.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as Joi from 'joi';
+import { DirectorModule } from './director/director.module';
+import { Director } from './director/entities/director.entity';
+import { Genre } from './genre/entities/genre.entity';
+import { GenreModule } from './genre/genre.module';
+import { MovieDetail } from './movie/entities/movie-detail.entity';
 import { Movie } from './movie/entities/movie.entity';
+import { MovieModule } from './movie/movie.module';
 
 @Module({
   imports: [
@@ -31,7 +36,7 @@ import { Movie } from './movie/entities/movie.entity';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [Movie],
+        entities: [Movie, MovieDetail, Director, Genre],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -43,6 +48,8 @@ import { Movie } from './movie/entities/movie.entity';
     */
 
     MovieModule,
+    DirectorModule,
+    GenreModule,
   ],
   controllers: [AppController],
   providers: [AppService],

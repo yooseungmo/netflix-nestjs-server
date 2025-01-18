@@ -1,36 +1,60 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  VersionColumn,
 } from 'typeorm';
-// @Expose() // 불러오다
-// @Exclude() // 제외하다
-
-// Entity Embedding
-export class BaseEntity {
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @VersionColumn()
-  version: number;
-}
+import { BaseTable } from '../../common/entities/base-table.entity';
+import { Director } from '../../director/entities/director.entity';
+import { Genre } from '../../genre/entities/genre.entity';
+import { MovieDetail } from './movie-detail.entity';
+/**
+ * ManyToOne -> Director
+ * OneToOne -> MovieDetail
+ * ManyToMany -> Genre
+ */
 
 @Entity()
-export class Movie extends BaseEntity {
+export class Movie extends BaseTable {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   title: string;
 
-  @Column()
-  genre: string;
+  @ManyToMany(() => Genre, (genre) => genre.movies)
+  /**
+   * @ManyToOne / @OneToMany 관계와 FK컬럼으로 관리 가능하지만,
+   * @ManyToMany다대다 관계가 필수적인 경우, @JoinTable()과 함께 사용하는 것이 권장
+   * TypeORM이 자동으로 조인 테이블 생성 및 관계 데이터를 관리해 주기 때문에 효율적
+   */
+  @JoinTable()
+  genres: Genre[];
+
+  @OneToOne(() => MovieDetail, (movieDetail) => movieDetail.id, {
+    cascade: true, // 릴레이션 된 테이블까지 자동으로
+    /**
+     *  null이 될수 없다
+     *  TypeOrm에서만 적용되는게 아니라 실제 DB에서 적용됨
+     *  릴레이션 값만 따로 지워지는거 방지
+     *  데이터 무결성 !
+     */
+    nullable: false,
+  })
+  @JoinColumn()
+  detail: MovieDetail;
+
+  @ManyToOne(() => Director, (director) => director.id, {
+    cascade: true,
+    nullable: false,
+  })
+  director: Director;
 }
 
 /**
