@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { DirectorModule } from './director/director.module';
 import { Director } from './director/entities/director.entity';
 import { Genre } from './genre/entities/genre.entity';
@@ -11,6 +12,8 @@ import { GenreModule } from './genre/genre.module';
 import { MovieDetail } from './movie/entities/movie-detail.entity';
 import { Movie } from './movie/entities/movie.entity';
 import { MovieModule } from './movie/movie.module';
+import { User } from './user/entities/user.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -24,6 +27,9 @@ import { MovieModule } from './movie/movie.module';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_DATABASE: Joi.string().required(),
+        HASH_ROUND: Joi.number().required(),
+        ACCESS_TOKEN_SECRET: Joi.string().required(),
+        REFRESH_TOKEN_SECRET: Joi.string().required(),
       }),
     }),
     // forRootAsync를 사용하는 이유는 위에 것들이 IoC컨테이너에서 생성된 인스턴스를 활용하기 위함
@@ -36,7 +42,7 @@ import { MovieModule } from './movie/movie.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [Movie, MovieDetail, Director, Genre],
+        entities: [Movie, MovieDetail, Director, Genre, User],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -50,6 +56,8 @@ import { MovieModule } from './movie/movie.module';
     MovieModule,
     DirectorModule,
     GenreModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
