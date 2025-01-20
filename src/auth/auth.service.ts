@@ -64,7 +64,9 @@ export class AuthService {
       // 옵션중에 decode는 걍 갖고오고, verifyAsync는 검증하고 갖고옴
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>(
-          envVariableKeys.refreshTokenSecret,
+          isRefreshToken
+            ? envVariableKeys.refreshTokenSecret
+            : envVariableKeys.accessTokenSecret,
         ),
       });
 
