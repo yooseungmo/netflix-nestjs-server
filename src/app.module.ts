@@ -11,6 +11,7 @@ import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthGuard } from './auth/\bguard/auth.guard';
+import { RBACGuard } from './auth/\bguard/rbac.guard';
 import { AuthModule } from './auth/auth.module';
 import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware';
 import { envVariableKeys } from './common/const/env.const';
@@ -75,6 +76,10 @@ import { UserModule } from './user/user.module';
       /** 앱 전체에 Guard 적용 */
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RBACGuard,
     },
   ],
 })
