@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CommonModule } from '../common/\bcommon.module';
 import { Director } from '../director/entities/director.entity';
 import { Genre } from '../genre/entities/genre.entity';
 import { MovieDetail } from './entities/movie-detail.entity';
@@ -8,7 +9,10 @@ import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Movie, MovieDetail, Director, Genre])],
+  imports: [
+    TypeOrmModule.forFeature([Movie, MovieDetail, Director, Genre]),
+    CommonModule,
+  ],
   controllers: [MovieController],
   providers: [MovieService],
 })
