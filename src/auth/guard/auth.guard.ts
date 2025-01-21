@@ -7,7 +7,7 @@ export class AuthGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    // 만약에 public decoration이 돼있으면
+    // 만약에 public decoration이 되어 있으면
     // 모든 로직을 bypass
     /** isPublic : @Public(여기 안에 값) 이 객체로 출력됨, 비어있으면 빈 객체 */
     const isPublic = this.reflector.get(Public, context.getHandler());

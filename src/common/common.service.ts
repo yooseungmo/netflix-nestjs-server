@@ -64,14 +64,6 @@ export class CommonService {
         qb.addOrderBy(`${qb.alias}.${column}`, direction);
       }
     }
-    // if (id) {
-    //   const direction = order === 'ASC' ? '>' : '<';
-
-    //   // order -> ASC : movie.id > :id
-    //   qb.where(`${qb.alias}.id ${direction} :id`, { id });
-    // }
-
-    // qb.orderBy(`${qb.alias}.id`, order);
 
     qb.take(take);
 

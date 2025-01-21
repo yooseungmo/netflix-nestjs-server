@@ -43,7 +43,7 @@ export class Movie extends BaseTable {
   likeCount: number;
 
   @OneToOne(() => MovieDetail, (movieDetail) => movieDetail.id, {
-    cascade: true, // 릴레이션 된 테이블까지 자동으로
+    cascade: true, // 릴레이션 된 테이블까지 자동으로 저장하거나 삭제
     /**
      *  null이 될수 없다
      *  TypeOrm에서만 적용되는게 아니라 실제 DB에서 적용됨
@@ -63,7 +63,6 @@ export class Movie extends BaseTable {
 }
 
 /**
- *
  * 1. Embedding Entity는 DB에서 속성과 컬럼 이름이 붙어서 나온다.
  * @Column(() => BaseEntity)
  * ex) baseCreatedAt
@@ -72,5 +71,4 @@ export class Movie extends BaseTable {
  * 2. Inheritence는 extends로 OOP 처럼 사용하고
  * 따로 base 컬럼같은거 필요없음
  * DB에도 컬럼값만 그대로 잘 나옴
- *
  */

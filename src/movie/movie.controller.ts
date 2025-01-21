@@ -25,8 +25,7 @@ import { MovieService } from './movie.service';
 
 @Controller('/movie')
 @UseInterceptors(ClassSerializerInterceptor)
-// 클래스 트랜스포머를 적용하겠다.
-// 직렬화, 역직렬화 과정에서 노출을 안시키는거임
+// 직렬화, 역직렬화 과정에서 @Exclude(), @Expose() 데코레이터를 사용해 노출을 제한
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
@@ -47,7 +46,7 @@ export class MovieController {
   @UseGuards(AuthGuard)
   @UseInterceptors(TransactionInterceptor)
   postMovie(@Body() dto: CreateMovieDto, @Request() req) {
-    return this.movieService.create(dto, req.queryRunnr);
+    return this.movieService.create(dto, req.queryRunner);
   }
 
   @Patch(':id')

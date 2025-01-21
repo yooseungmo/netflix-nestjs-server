@@ -37,24 +37,12 @@ export class MovieService {
       qb.where('movie.title Like :title', { title: `%${title}%` });
     }
 
-    // this.commonService.applyPagePaginationParamsToQb(qb, dto);
     const { nextCursor } =
       await this.commonService.applyCursorPaginationParamsToQb(qb, dto);
 
     const [data, count] = await qb.getManyAndCount();
 
     return { data, nextCursor, count };
-
-    /** Repository 방식 */
-    // if (!title) {
-    //   return this.movieRepository.find({
-    //     relations: ['detail', 'director'],
-    //   });
-    // }
-    // return this.movieRepository.findAndCount({
-    //   where: { title: Like(`${title}%`) },
-    //   relations: ['detail'],
-    // });
   }
 
   async findOne(id: number) {
@@ -66,11 +54,6 @@ export class MovieService {
       .where('movie.id = :id', { id })
       .getOne();
 
-    /** Repository 방식 */
-    // const movie = await this.movieRepository.findOne({
-    //   where: { id },
-    //   relations: ['detail', 'director'],
-    // });
     if (!movie) {
       throw new NotFoundException('이건 없다잉');
     }
@@ -78,14 +61,6 @@ export class MovieService {
   }
 
   async create(createMovieDto: CreateMovieDto, qr: QueryRunner) {
-    // const qr = this.dataSource.createQueryRunner();
-    // await qr.connect();
-    // // 트랜잭션 격리 수준(Isolation Levels) 설정 가능
-    // await qr.startTransaction();
-
-    // try {
-    // Repository 어떤 테이블에서 하는지 테이블 넣어줘야 함
-    // QueryBuilder 는 이미 테이블 써놔서 따로 ㄴㄴ
     const director = await qr.manager.findOne(Director, {
       where: {
         id: createMovieDto.directorId,
@@ -150,28 +125,12 @@ export class MovieService {
       .of(movieId)
       .add(genres.map((genre) => genre.id));
 
-    /** Repository 방식 */
-    // const movie = await this.movieRepository.save({
-    //   title: createMovieDto.title,
-    //   detail: { detail: createMovieDto.detail },
-    //   director,
-    //   genres,
-    // });
-
-    // await qr.commitTransaction();
-
     return await qr.manager.findOne(Movie, {
       where: {
         id: movieId,
       },
       relations: ['detail', 'director', 'genres'],
     });
-    // } catch (e) {
-    //   await qr.rollbackTransaction();
-    //   throw e;
-    // } finally {
-    //   await qr.release();
-    // }
   }
 
   async update(id: number, updateMovieDto: UpdateMovieDto) {
@@ -237,9 +196,6 @@ export class MovieService {
         .where('id = :id', { id })
         .execute();
 
-      /** Repository 방식 */
-      // await this.movieRepository.update({ id }, movieUpdateFields);
-
       if (detail) {
         await qr.manager
           .createQueryBuilder()
@@ -249,16 +205,6 @@ export class MovieService {
           })
           .where('id =:id', { id: movie.detail.id })
           .execute();
-
-        /** Repository 방식 */
-        // await this.movieDetailRepository.update(
-        //   {
-        //     id: movie.detail.id,
-        //   },
-        //   {
-        //     detail,
-        //   },
-        // );
       }
 
       if (newGenres) {
@@ -273,18 +219,7 @@ export class MovieService {
           );
       }
 
-      /** Repository 방식 */
-      // const newMovie = await this.movieRepository.findOne({
-      //   where: { id },
-      //   relations: ['detail', 'director'],
-      // });
-
-      // newMovie.genres = newGenres;
-
-      // await this.movieRepository.save(newMovie);
-
       /**
-       * return this.movieRepository.preload(newMovie);
        * .preload()
        * id를 기준으로 기존 엔티티를 찾아서 새로운 데이터로 업데이트한 후,
        * 엔티티 객체만 반환.
@@ -321,9 +256,6 @@ export class MovieService {
       .delete()
       .where('id = :id', { id })
       .execute();
-
-    /** Repository 방식 */
-    // await this.movieRepository.delete(id);
 
     await this.movieDetailRepository.delete(id);
     return id;

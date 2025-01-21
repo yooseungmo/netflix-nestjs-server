@@ -28,7 +28,6 @@ export class ResponseTimeInterceptor implements NestInterceptor {
           console.log(
             `!!!!!!!!TIMEOUT!!!!!!! [@${req.method} ${req.path}] ${diff}ms`,
           );
-          // throw new InternalServerErrorException('시간이 1초 이상 걸립니다.');
         } else {
           console.log(`[@${req.method} ${req.path}] ${diff}ms`);
         }

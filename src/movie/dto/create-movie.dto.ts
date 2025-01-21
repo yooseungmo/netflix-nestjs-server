@@ -17,7 +17,6 @@ class PassWordValidator implements ValidatorConstraintInterface {
     value: any,
     _validationArguments?: ValidationArguments,
   ): Promise<boolean> | boolean {
-    // throw new Error('Method not implemented.');
     // 비밀번호 길이는 4~8
     return value.length >= 4 && value.length <= 8;
   }

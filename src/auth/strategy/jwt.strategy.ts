@@ -11,7 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      // 만료기간 무시할지?
+      // 만료기간 무시할지 체크
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('ACCESS_TOKEN_SECRET'),
     });
