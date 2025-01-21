@@ -9,12 +9,14 @@ import {
   Patch,
   Post,
   Query,
+  Request,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/\bguard/auth.guard';
 import { Public } from '../auth/decorator/public.decorator';
 import { RBAC } from '../auth/decorator/rbac.decorator';
+import { TransactionInterceptor } from '../common/interceptor/\btransaction.interceptor';
 import { Role } from '../user/entities/user.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { GetMoviesDto } from './dto/get-movies.dto';
@@ -43,8 +45,9 @@ export class MovieController {
   @Post()
   @RBAC(Role.admin)
   @UseGuards(AuthGuard)
-  postMovie(@Body() dto: CreateMovieDto) {
-    return this.movieService.create(dto);
+  @UseInterceptors(TransactionInterceptor)
+  postMovie(@Body() dto: CreateMovieDto, @Request() req) {
+    return this.movieService.create(dto, req.queryRunnr);
   }
 
   @Patch(':id')
