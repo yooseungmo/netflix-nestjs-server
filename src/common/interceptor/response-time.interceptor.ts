@@ -2,7 +2,6 @@ import {
   CallHandler,
   ExecutionContext,
   Injectable,
-  InternalServerErrorException,
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
@@ -29,7 +28,7 @@ export class ResponseTimeInterceptor implements NestInterceptor {
           console.log(
             `!!!!!!!!TIMEOUT!!!!!!! [@${req.method} ${req.path}] ${diff}ms`,
           );
-          throw new InternalServerErrorException('시간이 1초 이상 걸립니다.');
+          // throw new InternalServerErrorException('시간이 1초 이상 걸립니다.');
         } else {
           console.log(`[@${req.method} ${req.path}] ${diff}ms`);
         }
