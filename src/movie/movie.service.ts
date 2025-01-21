@@ -28,7 +28,7 @@ export class MovieService {
   async findAll(dto: GetMoviesDto) {
     const { title } = dto;
 
-    const qb = await this.movieRepository
+    const qb = this.movieRepository
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.director', 'director')
       .leftJoinAndSelect('movie.genres', 'genres');
@@ -38,9 +38,12 @@ export class MovieService {
     }
 
     // this.commonService.applyPagePaginationParamsToQb(qb, dto);
-    this.commonService.applyCursorPaginationParamsToQb(qb, dto);
+    const { nextCursor } =
+      await this.commonService.applyCursorPaginationParamsToQb(qb, dto);
 
-    return await qb.getManyAndCount();
+    const [data, count] = await qb.getManyAndCount();
+
+    return { data, nextCursor, count };
 
     /** Repository 방식 */
     // if (!title) {
