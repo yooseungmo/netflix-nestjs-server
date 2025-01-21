@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
@@ -15,6 +15,7 @@ import { RBACGuard } from './auth/\bguard/rbac.guard';
 import { AuthModule } from './auth/auth.module';
 import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware';
 import { envVariableKeys } from './common/const/env.const';
+import { ResponseTimeInterceptor } from './common/interceptor/response-time.interceptor';
 import { DirectorModule } from './director/director.module';
 import { Director } from './director/entities/director.entity';
 import { Genre } from './genre/entities/genre.entity';
@@ -80,6 +81,10 @@ import { UserModule } from './user/user.module';
     {
       provide: APP_GUARD,
       useClass: RBACGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseTimeInterceptor,
     },
   ],
 })
