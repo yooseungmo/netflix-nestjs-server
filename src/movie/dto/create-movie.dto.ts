@@ -63,4 +63,7 @@ export class CreateMovieDto {
   // postman에서 form-data 사용시 string 밖에 못쓴다. 그래서 @Type() 해줘야함
   @Type(() => Number)
   genreIds: number[];
+
+  @IsString()
+  movieFileName: string;
 }

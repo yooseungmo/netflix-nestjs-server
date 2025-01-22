@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   ClassSerializerInterceptor,
   Controller,
@@ -11,11 +10,9 @@ import {
   Post,
   Query,
   Request,
-  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '../auth/\bguard/auth.guard';
 import { Public } from '../auth/decorator/public.decorator';
 import { RBAC } from '../auth/decorator/rbac.decorator';
@@ -48,31 +45,8 @@ export class MovieController {
   @RBAC(Role.admin)
   @UseGuards(AuthGuard)
   @UseInterceptors(TransactionInterceptor)
-  @UseInterceptors(
-    FileInterceptor('movie', {
-      limits: {
-        fileSize: 20000000,
-      },
-      fileFilter(req, file, callback) {
-        if (file.mimetype !== 'video/mp4') {
-          return callback(
-            new BadRequestException('MP4 타입만 업로드 가능합니다.'),
-            // false면 저장 안함
-            false,
-          );
-        }
-        return callback(null, false);
-      },
-    }),
-  )
-  postMovie(
-    @Body() dto: CreateMovieDto,
-    @Request() req,
-    @UploadedFile()
-    movie: Express.Multer.File,
-  ) {
-    console.log(movie);
-    return this.movieService.create(dto, movie.filename, req.queryRunner);
+  postMovie(@Body() dto: CreateMovieDto, @Request() req) {
+    return this.movieService.create(dto, req.queryRunner);
   }
 
   @Patch(':id')
