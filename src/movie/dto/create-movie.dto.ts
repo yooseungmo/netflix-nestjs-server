@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
   IsArray,
@@ -59,5 +60,7 @@ export class CreateMovieDto {
       each: true,
     },
   )
+  // postman에서 form-data 사용시 string 밖에 못쓴다. 그래서 @Type() 해줘야함
+  @Type(() => Number)
   genreIds: number[];
 }
