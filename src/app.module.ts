@@ -6,8 +6,10 @@ import {
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthGuard } from './auth/\bguard/auth.guard';
@@ -65,7 +67,12 @@ import { UserModule } from './user/user.module';
       이거 prod 에서는 절떄 true ㄴㄴ
       TypeORM 설정에 따라 데이터베이스 테이블과 컬럼이 자동으로 생성되거나 수정돼.
     */
-
+    ServeStaticModule.forRoot({
+      // 여기서 찾아라
+      rootPath: join(process.cwd(), 'public'),
+      // 이걸로 시작하는 path여야 됨
+      serveRoot: '/public/',
+    }),
     MovieModule,
     DirectorModule,
     GenreModule,
