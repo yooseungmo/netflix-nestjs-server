@@ -19,6 +19,9 @@ import { MovieService } from './movie.service';
       storage: diskStorage({
         // cwd: current woking directory
         destination: join(process.cwd(), 'public', 'movie'),
+        // filename: (req, file, cb) => {
+        //   cb(null, `${v4()}_${Date.now()}.${extension}`);
+        // },
       }),
     }),
   ],

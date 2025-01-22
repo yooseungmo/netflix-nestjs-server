@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   ClassSerializerInterceptor,
   Controller,
@@ -24,6 +25,7 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { GetMoviesDto } from './dto/get-movies.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieService } from './movie.service';
+import { MovieFilePipe } from './pipe/movie-file.pipe';
 
 @Controller('/movie')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -47,13 +49,35 @@ export class MovieController {
   @RBAC(Role.admin)
   @UseGuards(AuthGuard)
   @UseInterceptors(TransactionInterceptor)
-  @UseInterceptors(FileInterceptor('movie'))
+  @UseInterceptors(
+    FileInterceptor('movie', {
+      limits: {
+        fileSize: 20000000,
+      },
+      fileFilter(req, file, callback) {
+        if (file.mimetype !== 'video/mp4') {
+          return callback(
+            new BadRequestException('MP4 타입만 업로드 가능합니다.'),
+            // false면 저장 안함
+            false,
+          );
+        }
+        return callback(null, false);
+      },
+    }),
+  )
   postMovie(
     @Body() dto: CreateMovieDto,
     @Request() req,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new MovieFilePipe({
+        maxSize: 20,
+        mimetype: 'video/mp4',
+      }),
+    )
+    movie: Express.Multer.File,
   ) {
-    console.log(file);
+    console.log(movie);
     return this.movieService.create(dto, req.queryRunner);
   }
 
