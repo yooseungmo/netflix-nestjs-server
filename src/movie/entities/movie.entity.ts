@@ -6,6 +6,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -14,6 +15,7 @@ import { Director } from '../../director/entities/director.entity';
 import { Genre } from '../../genre/entities/genre.entity';
 import { User } from '../../user/entities/user.entity';
 import { MovieDetail } from './movie-detail.entity';
+import { MovieUserLike } from './movie-user-like.entity';
 /**
  * ManyToOne -> Director
  * OneToOne -> MovieDetail
@@ -69,6 +71,9 @@ export class Movie extends BaseTable {
     nullable: false,
   })
   director: Director;
+
+  @OneToMany(() => MovieUserLike, (mul) => mul.movie)
+  likeUsers: MovieUserLike[];
 }
 
 /**
