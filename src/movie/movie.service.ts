@@ -1,5 +1,7 @@
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -36,6 +38,8 @@ export class MovieService {
     private readonly movieUserLikeRepository: Repository<MovieUserLike>,
     private readonly dataSource: DataSource,
     private readonly commonService: CommonService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   async findAll(dto: GetMoviesDto, userId?: number) {
@@ -84,6 +88,25 @@ export class MovieService {
     }
 
     return { data, nextCursor, count };
+  }
+
+  async findRecent() {
+    const cacheData = await this.cacheManager.get('MOVIE_RECENT');
+
+    if (cacheData) {
+      return cacheData;
+    }
+
+    const data = this.movieRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 10,
+    });
+
+    await this.cacheManager.set('MOVIE_RECENT', data, 3000);
+
+    return data;
   }
 
   async findOne(id: number) {
