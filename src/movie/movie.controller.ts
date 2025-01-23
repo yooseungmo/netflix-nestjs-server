@@ -17,6 +17,7 @@ import { AuthGuard } from '../auth/\bguard/auth.guard';
 import { Public } from '../auth/decorator/public.decorator';
 import { RBAC } from '../auth/decorator/rbac.decorator';
 import { QueryRunner } from '../common/decorator/query-runner.decorator';
+import { Throttle } from '../common/decorator/throttle.decorator';
 import { TransactionInterceptor } from '../common/interceptor/\btransaction.interceptor';
 import { UserId } from '../user/decorator/user-id.decorator';
 import { Role } from '../user/entities/user.entity';
@@ -33,6 +34,10 @@ export class MovieController {
 
   @Get()
   @Public()
+  @Throttle({
+    count: 5,
+    unit: 'minute',
+  })
   getMovies(@Query() dto: GetMoviesDto, @UserId() userId: number) {
     return this.movieService.findAll(dto, userId);
   }
