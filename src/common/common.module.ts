@@ -5,6 +5,7 @@ import { join } from 'path';
 import { v4 } from 'uuid';
 import { CommonController } from './common.controller';
 import { CommonService } from './common.service';
+import { TaskService } from './tsaks.service';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { CommonService } from './common.service';
     }),
   ],
   controllers: [CommonController],
-  providers: [CommonService],
+  providers: [CommonService, TaskService],
   exports: [CommonService],
 })
 export class CommonModule {}
