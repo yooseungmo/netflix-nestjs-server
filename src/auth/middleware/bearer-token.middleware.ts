@@ -1,5 +1,7 @@
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NestMiddleware,
   UnauthorizedException,
@@ -14,6 +16,8 @@ export class BearerTokenMiddleware implements NestMiddleware {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
@@ -28,6 +32,16 @@ export class BearerTokenMiddleware implements NestMiddleware {
 
     try {
       const token = this.validateBearerToken(authHeader);
+
+      const tokenKey = `TOKEN_${token}`;
+
+      const cachedPayload = await this.cacheManager.get(tokenKey);
+
+      if (cachedPayload) {
+        req.user = cachedPayload;
+
+        return next();
+      }
 
       const decodedPayload = this.jwtService.decode(token);
 
@@ -47,6 +61,17 @@ export class BearerTokenMiddleware implements NestMiddleware {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>(secretKey),
       });
+
+      const expiryDate = +new Date(payload['exp'] * 1000);
+      const now = +Date.now();
+
+      const differenceInseconds = (expiryDate - now) / 1000;
+
+      await this.cacheManager.set(
+        tokenKey,
+        payload,
+        Math.max((differenceInseconds - 30) * 1000, 1),
+      );
 
       req.user = payload;
       next();

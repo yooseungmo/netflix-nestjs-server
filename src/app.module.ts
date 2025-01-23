@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import {
   MiddlewareConsumer,
   Module,
@@ -73,6 +74,10 @@ import { UserModule } from './user/user.module';
       rootPath: join(process.cwd(), 'public'),
       // 이걸로 시작하는 path여야 됨
       serveRoot: '/public/',
+    }),
+    CacheModule.register({
+      ttl: 3000,
+      isGlobal: true,
     }),
     MovieModule,
     DirectorModule,
