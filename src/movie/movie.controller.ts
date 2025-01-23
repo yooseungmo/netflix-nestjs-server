@@ -9,14 +9,16 @@ import {
   Patch,
   Post,
   Query,
-  Request,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { QueryRunner as QR } from 'typeorm';
 import { AuthGuard } from '../auth/\bguard/auth.guard';
 import { Public } from '../auth/decorator/public.decorator';
 import { RBAC } from '../auth/decorator/rbac.decorator';
+import { QueryRunner } from '../common/decorator/query-runner.decorator';
 import { TransactionInterceptor } from '../common/interceptor/\btransaction.interceptor';
+import { UserId } from '../user/decorator/user-id.decorator';
 import { Role } from '../user/entities/user.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { GetMoviesDto } from './dto/get-movies.dto';
@@ -45,8 +47,14 @@ export class MovieController {
   @RBAC(Role.admin)
   @UseGuards(AuthGuard)
   @UseInterceptors(TransactionInterceptor)
-  postMovie(@Body() dto: CreateMovieDto, @Request() req) {
-    return this.movieService.create(dto, req.queryRunner);
+  postMovie(
+    @Body() dto: CreateMovieDto,
+    /** req가 any 타입이라서 custom decorator로 확인을 해주는게 안전함 */
+    // @Request() req,
+    @QueryRunner() queryRunner: QR,
+    @UserId() userId: number,
+  ) {
+    return this.movieService.create(dto, userId, queryRunner);
   }
 
   @Patch(':id')
