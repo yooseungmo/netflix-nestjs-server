@@ -49,6 +49,11 @@ export class Movie extends BaseTable {
   })
   likeCount: number;
 
+  @Column({
+    default: 0,
+  })
+  dislikeCount: number;
+
   @OneToOne(() => MovieDetail, (movieDetail) => movieDetail.id, {
     cascade: true, // 릴레이션 된 테이블까지 자동으로 저장하거나 삭제
     /**
