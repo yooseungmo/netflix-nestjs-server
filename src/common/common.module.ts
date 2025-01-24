@@ -7,6 +7,7 @@ import { v4 } from 'uuid';
 import { Movie } from '../movie/entities/movie.entity';
 import { CommonController } from './common.controller';
 import { CommonService } from './common.service';
+import { DefaultLogger } from './logger/default.logger';
 import { TaskService } from './tasks.service';
 
 @Module({
@@ -31,7 +32,7 @@ import { TaskService } from './tasks.service';
     TypeOrmModule.forFeature([Movie]),
   ],
   controllers: [CommonController],
-  providers: [CommonService, TaskService],
-  exports: [CommonService],
+  providers: [CommonService, TaskService, DefaultLogger],
+  exports: [CommonService, DefaultLogger],
 })
 export class CommonModule {}
