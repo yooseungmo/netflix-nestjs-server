@@ -12,6 +12,12 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { QueryRunner as QR } from 'typeorm';
 import { AuthGuard } from '../auth/\bguard/auth.guard';
 import { Public } from '../auth/decorator/public.decorator';
@@ -27,6 +33,8 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieService } from './movie.service';
 
 @Controller('/movie')
+@ApiBearerAuth()
+@ApiTags('movie')
 @UseInterceptors(ClassSerializerInterceptor)
 // 직렬화, 역직렬화 과정에서 @Exclude(), @Expose() 데코레이터를 사용해 노출을 제한
 export class MovieController {
@@ -38,11 +46,18 @@ export class MovieController {
     count: 5,
     unit: 'minute',
   })
+  @ApiOperation({
+    description: '[Movie]를 Pagination 하는 API',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '성공적으로 API Pagination을 실행 했을때!',
+  })
   getMovies(@Query() dto: GetMoviesDto, @UserId() userId: number) {
     return this.movieService.findAll(dto, userId);
   }
 
-  @Get()
+  @Get('recent')
   getMoviesRecent() {
     return this.movieService.findRecent();
   }
