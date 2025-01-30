@@ -2,7 +2,6 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
-  Get,
   Post,
   Request,
   UseGuards,
@@ -12,7 +11,6 @@ import { ApiBasicAuth, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Authorization } from './decorator/authorization.decorator';
 import { Public } from './decorator/public.decorator';
-import { JwtAuthGuard } from './strategy/jwt.strategy';
 import { LocalAuthGuard } from './strategy/local.strategy';
 
 @Controller('auth')
@@ -60,10 +58,10 @@ export class AuthController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('private')
-  // AuthGuard Validate 함수는 req로 반환한다
-  async private(@Request() req) {
-    return req.user;
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Get('private')
+  // // AuthGuard Validate 함수는 req로 반환한다
+  // async private(@Request() req) {
+  //   return req.user;
+  // }
 }

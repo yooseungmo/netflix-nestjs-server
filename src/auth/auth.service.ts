@@ -154,13 +154,13 @@ export class AuthService {
       },
       {
         secret: isRefreshToken ? refreshTokenSecret : accessTokenSecret,
-        expiresIn: accessTokenSecret ? '24h' : 300,
+        expiresIn: isRefreshToken ? '24h' : 300,
       },
     );
   }
 
-  async login(rawtoken: string) {
-    const { email, password } = this.parseBasicToken(rawtoken);
+  async login(rawToken: string) {
+    const { email, password } = this.parseBasicToken(rawToken);
 
     const user = await this.authenticate(email, password);
 
