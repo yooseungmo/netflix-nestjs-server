@@ -19,10 +19,6 @@ export class GenreService {
       },
     });
 
-    if (genre) {
-      throw new NotFoundException('존재하지 않는 장르임');
-    }
-
     return this.genreRepository.save(createGenreDto);
   }
 
@@ -30,10 +26,18 @@ export class GenreService {
     return this.genreRepository.find();
   }
 
-  findOne(id: number) {
-    return this.genreRepository.findOne({
-      where: { id },
+  async findOne(id: number) {
+    const genre = await this.genreRepository.findOne({
+      where: {
+        id,
+      },
     });
+
+    if (!genre) {
+      throw new NotFoundException('존재하지 않는 장르임');
+    }
+
+    return genre;
   }
 
   async update(id: number, updateGenreDto: UpdateGenreDto) {
@@ -63,7 +67,17 @@ export class GenreService {
     return newGenre;
   }
 
-  remove(id: number) {
-    return this.genreRepository.delete(id);
+  async remove(id: number) {
+    const genre = await this.genreRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!genre) {
+      throw new NotFoundException('존재하지 않는 장르임');
+    }
+    await this.genreRepository.delete(id);
+    return id;
   }
 }
