@@ -26,7 +26,9 @@
     "test:director": "jest --testPathPattern=src/director --coverage --collectCoverageFrom=src/director/**",
     "test:director:watch": "jest --watch --testPathPattern=src/director --coverage --collectCoverageFrom=src/director/**",
     "test:genre": "jest --testPathPattern=src/genre --coverage --collectCoverageFrom=src/genre/**",
-    "test:genre:watch": "jest --watch --testPathPattern=src/genre --coverage --collectCoverageFrom=src/genre/**"
+    "test:genre:watch": "jest --watch --testPathPattern=src/genre --coverage --collectCoverageFrom=src/genre/**",
+    "test:movie": "jest --testPathPattern=src/movie --coverage --collectCoverageFrom=src/movie/**",
+    "test:movie:watch": "jest --watch --testPathPattern=src/movie --coverage --collectCoverageFrom=src/movie/**"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.0",
@@ -112,7 +114,9 @@
       "strategy.ts",
       "decorator.ts",
       "pipe.ts",
-      "common/*"
+      "common/*",
+      "main.ts",
+      "app/*"
     ],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",

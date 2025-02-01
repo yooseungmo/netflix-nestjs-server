@@ -32,7 +32,7 @@ describe('GenreService', () => {
     genreRepository = module.get<Repository<Genre>>(getRepositoryToken(Genre));
   });
 
-  afterAll(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
