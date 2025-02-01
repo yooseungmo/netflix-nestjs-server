@@ -34,8 +34,9 @@ import { UserModule } from './user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // 어떤 모듈에서든 글로벌하게 환경변수에 등록된거 사용가능
+      envFilePath: process.env.NODE_ENV === 'test' ? 'test.env' : '.env',
       validationSchema: Joi.object({
-        ENV: Joi.string().valid('dev', 'prod').required(),
+        ENV: Joi.string().valid('test', 'dev', 'prod').required(),
         DB_TYPE: Joi.string().valid('postgres').required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.number().required(),

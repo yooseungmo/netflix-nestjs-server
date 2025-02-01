@@ -26,7 +26,7 @@ export class CommonController {
             false,
           );
         }
-        return callback(null, false);
+        return callback(null, true);
       },
     }),
   )
