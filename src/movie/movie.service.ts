@@ -49,7 +49,7 @@ export class MovieService {
 
   /* istanbul ignore next */
   async getMovies() {
-    return await this.movieRepository
+    return this.movieRepository
       .createQueryBuilder('movie')
       .leftJoinAndSelect('movie.director', 'director')
       .leftJoinAndSelect('movie.genres', 'genres');
