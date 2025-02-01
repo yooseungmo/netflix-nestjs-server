@@ -12,14 +12,7 @@ import { MovieService } from './movie.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Movie,
-      MovieDetail,
-      Director,
-      Genre,
-      MovieUserLike,
-      User,
-    ]),
+    TypeOrmModule.forFeature([Movie, MovieDetail, Director, Genre, MovieUserLike, User]),
     CommonModule,
   ],
   controllers: [MovieController],

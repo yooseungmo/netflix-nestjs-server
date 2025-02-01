@@ -61,9 +61,7 @@ describe('GenreController', () => {
     it('should call genreService.findAll and return an array of genres', async () => {
       const genres = [{ id: 1, name: 'blanc' }];
 
-      jest
-        .spyOn(mockGenreService, 'findAll')
-        .mockResolvedValue(genres as Genre[]);
+      jest.spyOn(mockGenreService, 'findAll').mockResolvedValue(genres as Genre[]);
 
       const result = await genreController.findAll();
 

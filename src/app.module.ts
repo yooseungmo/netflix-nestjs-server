@@ -1,10 +1,5 @@
 import { CacheModule } from '@nestjs/cache-manager';
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -93,8 +88,7 @@ import { UserModule } from './user/user.module';
             }),
             winston.format.timestamp(),
             winston.format.printf(
-              (info) =>
-                `${info.timestamp} [${info.context}] ${info.level} ${info.message}`,
+              (info) => `${info.timestamp} [${info.context}] ${info.level} ${info.message}`,
             ),
           ),
         }),
@@ -107,8 +101,7 @@ import { UserModule } from './user/user.module';
             // }),
             winston.format.timestamp(),
             winston.format.printf(
-              (info) =>
-                `${info.timestamp} [${info.context}] ${info.level} ${info.message}`,
+              (info) => `${info.timestamp} [${info.context}] ${info.level} ${info.message}`,
             ),
           ),
         }),

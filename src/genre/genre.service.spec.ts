@@ -94,12 +94,8 @@ describe('GenreService', () => {
       const existingGenre = { id: 1, name: 'Blanc' };
       const updatedGenre = { id: 1, ...updateGenreDto };
 
-      jest
-        .spyOn(mockGenreRepository, 'findOne')
-        .mockResolvedValueOnce(existingGenre);
-      jest
-        .spyOn(mockGenreRepository, 'findOne')
-        .mockResolvedValueOnce(updatedGenre);
+      jest.spyOn(mockGenreRepository, 'findOne').mockResolvedValueOnce(existingGenre);
+      jest.spyOn(mockGenreRepository, 'findOne').mockResolvedValueOnce(updatedGenre);
 
       // await this.genreRepository.update() 이렇게만 있으면 그냥 실행이 되었는지만 체크
       // jest.spyOn(mockGenreRepository, 'update').mockResolvedValue(updatedGenre);
@@ -110,18 +106,13 @@ describe('GenreService', () => {
       expect(genreRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
       });
-      expect(genreRepository.update).toHaveBeenCalledWith(
-        { id: 1 },
-        updateGenreDto,
-      );
+      expect(genreRepository.update).toHaveBeenCalledWith({ id: 1 }, updateGenreDto);
     });
 
     it('should thow a NotFoundException if genre to update does not found', async () => {
       jest.spyOn(mockGenreRepository, 'findOne').mockResolvedValue(null);
 
-      await expect(genreService.update(1, { name: 'blanc' })).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(genreService.update(1, { name: 'blanc' })).rejects.toThrow(NotFoundException);
     });
   });
 

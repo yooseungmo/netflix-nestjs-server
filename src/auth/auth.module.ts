@@ -9,11 +9,7 @@ import { JwtAuthGuard } from './strategy/jwt.strategy';
 import { LocalStrategy } from './strategy/local.strategy';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    JwtModule.register({}),
-    UserModule,
-  ],
+  imports: [TypeOrmModule.forFeature([User]), JwtModule.register({}), UserModule],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtAuthGuard],
   exports: [AuthService, JwtModule],

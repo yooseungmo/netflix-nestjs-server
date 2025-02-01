@@ -50,9 +50,7 @@ export class TaskService {
     });
 
     await Promise.all(
-      deleteFilesTargets.map((x) =>
-        unlink(join(process.cwd(), 'public', 'tmep', x)),
-      ),
+      deleteFilesTargets.map((x) => unlink(join(process.cwd(), 'public', 'tmep', x))),
     );
   }
 

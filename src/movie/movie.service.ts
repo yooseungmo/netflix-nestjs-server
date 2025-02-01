@@ -54,8 +54,7 @@ export class MovieService {
       qb.where('movie.title Like :title', { title: `%${title}%` });
     }
 
-    const { nextCursor } =
-      await this.commonService.applyCursorPaginationParamsToQb(qb, dto);
+    const { nextCursor } = await this.commonService.applyCursorPaginationParamsToQb(qb, dto);
 
     let [data, count] = await qb.getManyAndCount();
 
@@ -125,11 +124,7 @@ export class MovieService {
     return movie;
   }
 
-  async create(
-    createMovieDto: CreateMovieDto,
-    userId: number,
-    qr: QueryRunner,
-  ) {
+  async create(createMovieDto: CreateMovieDto, userId: number, qr: QueryRunner) {
     const director = await qr.manager.findOne(Director, {
       where: {
         id: createMovieDto.directorId,
@@ -332,11 +327,7 @@ export class MovieService {
       throw new NotFoundException('이건 없다잉');
     }
 
-    await this.movieRepository
-      .createQueryBuilder()
-      .delete()
-      .where('id = :id', { id })
-      .execute();
+    await this.movieRepository.createQueryBuilder().delete().where('id = :id', { id }).execute();
 
     await this.movieDetailRepository.delete(id);
     return id;

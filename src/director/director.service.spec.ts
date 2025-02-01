@@ -31,9 +31,7 @@ describe('DirectorService', () => {
 
     /** module.get<타입>(프로바이드) */
     directorService = module.get<DirectorService>(DirectorService);
-    directorRepository = module.get<Repository<Director>>(
-      getRepositoryToken(Director),
-    );
+    directorRepository = module.get<Repository<Director>>(getRepositoryToken(Director));
   });
 
   afterEach(() => {
@@ -49,13 +47,9 @@ describe('DirectorService', () => {
       const createDirectorDto = {
         name: 'blanc',
       };
-      jest
-        .spyOn(mockDirectorRepository, 'save')
-        .mockResolvedValue(createDirectorDto);
+      jest.spyOn(mockDirectorRepository, 'save').mockResolvedValue(createDirectorDto);
 
-      const result = await directorService.create(
-        createDirectorDto as CreateDirectorDto,
-      );
+      const result = await directorService.create(createDirectorDto as CreateDirectorDto);
 
       expect(directorRepository.save).toHaveBeenCalledWith(createDirectorDto);
       expect(result).toEqual(createDirectorDto);
@@ -88,9 +82,7 @@ describe('DirectorService', () => {
         name: 'blanc',
       };
 
-      jest
-        .spyOn(mockDirectorRepository, 'findOne')
-        .mockResolvedValue(director as Director);
+      jest.spyOn(mockDirectorRepository, 'findOne').mockResolvedValue(director as Director);
 
       const result = await directorService.findOne(id);
 
@@ -116,25 +108,16 @@ describe('DirectorService', () => {
         name: 'blanc',
       };
 
-      jest
-        .spyOn(mockDirectorRepository, 'findOne')
-        .mockResolvedValueOnce(existingDirector);
-      jest
-        .spyOn(mockDirectorRepository, 'findOne')
-        .mockResolvedValueOnce(updatedDirector);
-      jest
-        .spyOn(mockDirectorRepository, 'update')
-        .mockResolvedValue(updatedDirector);
+      jest.spyOn(mockDirectorRepository, 'findOne').mockResolvedValueOnce(existingDirector);
+      jest.spyOn(mockDirectorRepository, 'findOne').mockResolvedValueOnce(updatedDirector);
+      jest.spyOn(mockDirectorRepository, 'update').mockResolvedValue(updatedDirector);
 
       const result = await directorService.update(id, updateDirectorDto);
 
       expect(directorRepository.findOne).toHaveBeenCalledWith({
         where: { id },
       });
-      expect(directorRepository.update).toHaveBeenCalledWith(
-        { id },
-        updateDirectorDto,
-      );
+      expect(directorRepository.update).toHaveBeenCalledWith({ id }, updateDirectorDto);
       expect(result).toEqual(updatedDirector);
     });
 
@@ -142,9 +125,7 @@ describe('DirectorService', () => {
       jest.spyOn(mockDirectorRepository, 'findOne').mockResolvedValue(null);
 
       /** rejects 테스트 할땐 파라미터 넣어줘야함 */
-      expect(directorService.update(1, { name: 'blanc' })).rejects.toThrow(
-        NotFoundException,
-      );
+      expect(directorService.update(1, { name: 'blanc' })).rejects.toThrow(NotFoundException);
     });
   });
 

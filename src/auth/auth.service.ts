@@ -1,10 +1,5 @@
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -87,9 +82,7 @@ export class AuthService {
       // 옵션중에 decode는 걍 갖고오고, verifyAsync는 검증하고 갖고옴
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>(
-          isRefreshToken
-            ? envVariableKeys.refreshTokenSecret
-            : envVariableKeys.accessTokenSecret,
+          isRefreshToken ? envVariableKeys.refreshTokenSecret : envVariableKeys.accessTokenSecret,
         ),
       });
 
@@ -139,12 +132,8 @@ export class AuthService {
   }
 
   async issueToken(user: { id: number; role: Role }, isRefreshToken: boolean) {
-    const refreshTokenSecret = this.configService.get<string>(
-      envVariableKeys.refreshTokenSecret,
-    );
-    const accessTokenSecret = this.configService.get<string>(
-      envVariableKeys.accessTokenSecret,
-    );
+    const refreshTokenSecret = this.configService.get<string>(envVariableKeys.refreshTokenSecret);
+    const accessTokenSecret = this.configService.get<string>(envVariableKeys.accessTokenSecret);
 
     return this.jwtService.signAsync(
       {

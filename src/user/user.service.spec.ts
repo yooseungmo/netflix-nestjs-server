@@ -147,9 +147,7 @@ describe('UserService', () => {
 
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValueOnce(null);
       jest.spyOn(mockConfigService, 'get').mockReturnValue(hashRound);
-      jest
-        .spyOn(bcrypt, 'hash')
-        .mockImplementation((password, hashRound) => hashedPassword);
+      jest.spyOn(bcrypt, 'hash').mockImplementation((password, hashRound) => hashedPassword);
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValueOnce(result);
 
       const createUser = await userService.create(createUserDto);
@@ -163,10 +161,7 @@ describe('UserService', () => {
       });
       expect(mockConfigService.get).toHaveBeenCalledWith(expect.anything());
       /** 실행이 되는지만 중요, 어떤식으로 실행이 되는지는 Unit Test에서 */
-      expect(bcrypt.hash).toHaveBeenCalledWith(
-        createUserDto.password,
-        hashRound,
-      );
+      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, hashRound);
       expect(mockUserRepository.save).toHaveBeenCalledWith({
         email: createUserDto.email,
         password: hashedPassword,
@@ -184,9 +179,7 @@ describe('UserService', () => {
         email: createUserDto.email,
       });
 
-      expect(userService.create(createUserDto)).rejects.toThrow(
-        BadRequestException,
-      );
+      expect(userService.create(createUserDto)).rejects.toThrow(BadRequestException);
       expect(mockUserRepository.findOne).toHaveBeenCalledWith({
         where: { email: createUserDto.email },
       });
@@ -209,9 +202,7 @@ describe('UserService', () => {
 
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValueOnce(user);
       jest.spyOn(mockConfigService, 'get').mockReturnValue(hashRound);
-      jest
-        .spyOn(bcrypt, 'hash')
-        .mockImplementation((password, hashRound) => hashedPassword);
+      jest.spyOn(bcrypt, 'hash').mockImplementation((password, hashRound) => hashedPassword);
       jest.spyOn(mockUserRepository, 'update').mockResolvedValue(undefined);
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValueOnce({
         ...user,
@@ -229,10 +220,7 @@ describe('UserService', () => {
           id: 1,
         },
       });
-      expect(bcrypt.hash).toHaveBeenCalledWith(
-        updateUserDto.password,
-        hashRound,
-      );
+      expect(bcrypt.hash).toHaveBeenCalledWith(updateUserDto.password, hashRound);
       expect(mockUserRepository.update).toHaveBeenCalledWith(
         {
           id: 1,
@@ -252,9 +240,7 @@ describe('UserService', () => {
         password: '123123',
       };
 
-      expect(userService.update(999, updateUserDto)).rejects.toThrow(
-        NotFoundException,
-      );
+      expect(userService.update(999, updateUserDto)).rejects.toThrow(NotFoundException);
       expect(mockUserRepository.findOne).toHaveBeenCalledWith({
         where: { id: 999 },
       });

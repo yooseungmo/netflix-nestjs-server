@@ -18,10 +18,7 @@ export class ThrottleInterceptor implements NestInterceptor {
     private readonly cacheManager: Cache,
     private readonly reflector: Reflector,
   ) {}
-  async intercept(
-    context: ExecutionContext,
-    next: CallHandler<any>,
-  ): Promise<Observable<any>> {
+  async intercept(context: ExecutionContext, next: CallHandler<any>): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
 
     const userId = request?.user?.sub;

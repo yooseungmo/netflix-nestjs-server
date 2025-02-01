@@ -68,9 +68,7 @@ describe('DirectorController', () => {
 
       jest.spyOn(mockDirectorService, 'create').mockResolvedValue(director);
 
-      const result = await directorController.create(
-        creatDirectorDto as CreateDirectorDto,
-      );
+      const result = await directorController.create(creatDirectorDto as CreateDirectorDto);
 
       expect(result).toEqual(director);
       expect(directorService.create).toHaveBeenCalledWith(creatDirectorDto);

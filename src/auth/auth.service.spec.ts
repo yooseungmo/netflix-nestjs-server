@@ -118,25 +118,19 @@ describe('AuthService', () => {
       const rawToken = 'InvalidTokenFormat';
 
       /** reject가 아니라 일반 에러 던질땐 이렇게 콜백 함수로 써야함 */
-      expect(() => authService.parseBasicToken(rawToken)).toThrow(
-        BadRequestException,
-      );
+      expect(() => authService.parseBasicToken(rawToken)).toThrow(BadRequestException);
     });
 
     it('should throw an error for invalid Basic token format', () => {
       const rawToken = 'Bearer InvalidTokenFormat';
 
-      expect(() => authService.parseBasicToken(rawToken)).toThrow(
-        BadRequestException,
-      );
+      expect(() => authService.parseBasicToken(rawToken)).toThrow(BadRequestException);
     });
 
     it('should throw an error for invalid Basic token format', () => {
       const rawToken = 'basic a';
 
-      expect(() => authService.parseBasicToken(rawToken)).toThrow(
-        BadRequestException,
-      );
+      expect(() => authService.parseBasicToken(rawToken)).toThrow(BadRequestException);
     });
   });
 
@@ -159,16 +153,12 @@ describe('AuthService', () => {
 
     it('should throw an BadRequestException for invalid Bearer token format', () => {
       const rawToken = 'test';
-      expect(authService.parseBearerToken(rawToken, false)).rejects.toThrow(
-        BadRequestException,
-      );
+      expect(authService.parseBearerToken(rawToken, false)).rejects.toThrow(BadRequestException);
     });
 
     it('should throw an BadRequestException for token not staring with Bearer', () => {
       const rawToken = 'Basic test';
-      expect(authService.parseBearerToken(rawToken, false)).rejects.toThrow(
-        BadRequestException,
-      );
+      expect(authService.parseBearerToken(rawToken, false)).rejects.toThrow(BadRequestException);
     });
 
     it('should throw an BadRequestException if payload.type is not refresh but isRefreshToken parameter', () => {
@@ -178,9 +168,7 @@ describe('AuthService', () => {
         type: 'refresh',
       });
 
-      expect(authService.parseBearerToken(rawToken, false)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      expect(authService.parseBearerToken(rawToken, false)).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw an BadRequestException if payload.type is not refresh but isRefreshToken parameter', () => {
@@ -190,9 +178,7 @@ describe('AuthService', () => {
         type: 'access',
       });
 
-      expect(authService.parseBearerToken(rawToken, true)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      expect(authService.parseBearerToken(rawToken, true)).rejects.toThrow(UnauthorizedException);
     });
   });
 
@@ -231,9 +217,9 @@ describe('AuthService', () => {
     it('should throw an error for not exostong user', async () => {
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(null);
 
-      expect(
-        authService.authenticate('testblanc@gmail.com', '123123'),
-      ).rejects.toThrow(BadRequestException);
+      expect(authService.authenticate('testblanc@gmail.com', '123123')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should thow an error for incorrect password', async () => {
@@ -242,9 +228,9 @@ describe('AuthService', () => {
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(user);
       jest.spyOn(bcrypt, 'compare').mockImplementation((a, b) => false);
 
-      expect(
-        authService.authenticate('testblanc@gmail.com', '123123'),
-      ).rejects.toThrow(BadRequestException);
+      expect(authService.authenticate('testblanc@gmail.com', '123123')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -294,9 +280,7 @@ describe('AuthService', () => {
       const password = '123123';
       const user = { id: 1, role: Role.user };
 
-      jest
-        .spyOn(authService, 'parseBasicToken')
-        .mockReturnValue({ email, password });
+      jest.spyOn(authService, 'parseBasicToken').mockReturnValue({ email, password });
       jest.spyOn(authService, 'authenticate').mockResolvedValue(user as User);
       jest.spyOn(authService, 'issueToken').mockResolvedValue('mocked.token');
 

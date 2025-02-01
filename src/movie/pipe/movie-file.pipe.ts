@@ -1,9 +1,4 @@
-import {
-  ArgumentMetadata,
-  BadRequestException,
-  Injectable,
-  PipeTransform,
-} from '@nestjs/common';
+import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { rename } from 'fs/promises';
 import { join } from 'path';
 import { v4 } from 'uuid';
@@ -31,15 +26,11 @@ export class MovieFilePipe
     const byteSize = this.options.maxSize * 1000000;
 
     if (value.size > byteSize) {
-      throw new BadRequestException(
-        `${this.options.maxSize}MB 이하의 사이즈만 업로드 가능합니다.`,
-      );
+      throw new BadRequestException(`${this.options.maxSize}MB 이하의 사이즈만 업로드 가능합니다.`);
     }
 
     if (value.mimetype !== this.options.mimetype) {
-      throw new BadRequestException(
-        `${this.options.mimetype} 만 업로드 가능합니다.`,
-      );
+      throw new BadRequestException(`${this.options.mimetype} 만 업로드 가능합니다.`);
     }
 
     const split = value.originalname.split('.');

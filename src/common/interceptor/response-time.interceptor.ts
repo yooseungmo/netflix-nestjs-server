@@ -1,9 +1,4 @@
-import {
-  CallHandler,
-  ExecutionContext,
-  Injectable,
-  NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 
 @Injectable()
@@ -25,9 +20,7 @@ export class ResponseTimeInterceptor implements NestInterceptor {
         const diff = resTime - reqTime;
 
         if (diff > 1000) {
-          console.log(
-            `!!!!!!!!TIMEOUT!!!!!!! [@${req.method} ${req.path}] ${diff}ms`,
-          );
+          console.log(`!!!!!!!!TIMEOUT!!!!!!! [@${req.method} ${req.path}] ${diff}ms`);
         } else {
           console.log(`[@${req.method} ${req.path}] ${diff}ms`);
         }

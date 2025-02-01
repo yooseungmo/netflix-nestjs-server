@@ -7,10 +7,7 @@ import { PagePaginationDto } from './dto/page-pagination.dto';
 export class CommonService {
   constructor() {}
 
-  applyPagePaginationParamsToQb<T>(
-    qb: SelectQueryBuilder<T>,
-    dto: PagePaginationDto,
-  ) {
+  applyPagePaginationParamsToQb<T>(qb: SelectQueryBuilder<T>, dto: PagePaginationDto) {
     const { page, take } = dto;
 
     if (take && page) {
@@ -21,10 +18,7 @@ export class CommonService {
     }
   }
 
-  async applyCursorPaginationParamsToQb<T>(
-    qb: SelectQueryBuilder<T>,
-    dto: CursorPaginationDto,
-  ) {
+  async applyCursorPaginationParamsToQb<T>(qb: SelectQueryBuilder<T>, dto: CursorPaginationDto) {
     let { cursor, take, order } = dto;
 
     if (cursor) {
@@ -37,25 +31,18 @@ export class CommonService {
 
       // (movie.column1, movie.column2, movie.column3) > (:value1, :value2, :value3)
       const columns = Object.keys(values);
-      const comparisonOperator = order.some((o) => o.endsWith('DESC'))
-        ? '<'
-        : '>';
+      const comparisonOperator = order.some((o) => o.endsWith('DESC')) ? '<' : '>';
       const whereConditions = columns.map((c) => `${qb.alias}.${c}`).join(',');
       const whereParams = columns.map((c) => `:${c}`).join(',');
 
-      qb.where(
-        `(${whereConditions}) ${comparisonOperator} (${whereParams})`,
-        values,
-      );
+      qb.where(`(${whereConditions}) ${comparisonOperator} (${whereParams})`, values);
     }
 
     for (let i = 0; i < order.length; i++) {
       const [column, direction] = order[i].split('_');
 
       if (direction !== 'ASC' && direction !== 'DESC') {
-        throw new BadRequestException(
-          'Order는 ASC 또는 DESC으로 입력해주세요.',
-        );
+        throw new BadRequestException('Order는 ASC 또는 DESC으로 입력해주세요.');
       }
 
       if (i === 0) {
@@ -95,9 +82,7 @@ export class CommonService {
     });
 
     const cursorObj = { values, order };
-    const nextCursor = Buffer.from(JSON.stringify(cursorObj)).toLocaleString(
-      'base64',
-    );
+    const nextCursor = Buffer.from(JSON.stringify(cursorObj)).toLocaleString('base64');
 
     return nextCursor;
   }

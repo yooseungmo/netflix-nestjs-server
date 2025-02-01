@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -82,10 +78,7 @@ export class UserService {
       this.configService.get<number>(envVariableKeys.hashRound),
     );
 
-    await this.userRepository.update(
-      { id },
-      { ...updateUserDto, password: hash },
-    );
+    await this.userRepository.update({ id }, { ...updateUserDto, password: hash });
 
     return await this.userRepository.findOne({
       where: {

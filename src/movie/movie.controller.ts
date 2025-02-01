@@ -12,12 +12,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QueryRunner as QR } from 'typeorm';
 import { AuthGuard } from '../auth/\bguard/auth.guard';
 import { Public } from '../auth/decorator/public.decorator';
@@ -84,10 +79,7 @@ export class MovieController {
 
   @Patch(':id')
   @RBAC(Role.admin)
-  patchMovie(
-    @Param('id', ParseIntPipe) id: string,
-    @Body() dto: UpdateMovieDto,
-  ) {
+  patchMovie(@Param('id', ParseIntPipe) id: string, @Body() dto: UpdateMovieDto) {
     return this.movieService.update(+id, dto);
   }
 
@@ -98,18 +90,12 @@ export class MovieController {
   }
 
   @Post(':id/like')
-  createMovieLike(
-    @Param('id', ParseIntPipe) movieId: number,
-    @UserId() userId: number,
-  ) {
+  createMovieLike(@Param('id', ParseIntPipe) movieId: number, @UserId() userId: number) {
     return this.movieService.toggleMovieLike(movieId, userId, true);
   }
 
   @Post(':id/dislike')
-  createMovieDislike(
-    @Param('id', ParseIntPipe) movieId: number,
-    @UserId() userId: number,
-  ) {
+  createMovieDislike(@Param('id', ParseIntPipe) movieId: number, @UserId() userId: number) {
     return this.movieService.toggleMovieLike(movieId, userId, false);
   }
 }
