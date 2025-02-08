@@ -60,6 +60,9 @@ import { UserModule } from './user/user.module';
         database: configService.get<string>(envVariableKeys.dbDatabase),
         entities: [Movie, MovieDetail, Director, Genre, User, MovieUserLike],
         synchronize: true,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
       inject: [ConfigService],
     }),
