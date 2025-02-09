@@ -32,6 +32,8 @@
     "test:movie:watch": "jest --watch --testPathPattern=src/movie --coverage --collectCoverageFrom=src/movie/**"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.744.0",
+    "@aws-sdk/s3-request-presigner": "^3.744.0",
     "@nestjs/cache-manager": "^2.2.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.3",
