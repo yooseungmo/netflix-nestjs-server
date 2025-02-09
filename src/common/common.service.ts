@@ -1,11 +1,45 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import * as AWS from 'aws-sdk';
 import { SelectQueryBuilder } from 'typeorm';
+import { v4 as Uuid } from 'uuid';
+import { envVariableKeys } from './const/env.const';
 import { CursorPaginationDto } from './dto/cursor-pagination.dto';
 import { PagePaginationDto } from './dto/page-pagination.dto';
 
 @Injectable()
 export class CommonService {
-  constructor() {}
+  private s3: AWS.S3;
+
+  constructor(private readonly configService: ConfigService) {
+    AWS.config.update({
+      credentials: {
+        accessKeyId: configService.get<string>(envVariableKeys.awsAccessKeyId),
+        secretAccessKey: configService.get<string>(envVariableKeys.awsSecretAccessKey),
+      },
+      region: configService.get<string>(envVariableKeys.awsRegion),
+    });
+
+    this.s3 = new AWS.S3();
+  }
+
+  async createPresignedUrl(expiresIn = 300) {
+    const params = {
+      Bucket: this.configService.get<string>(envVariableKeys.bucketName),
+      Key: `temp/${Uuid()}.mp4`,
+      Expires: expiresIn,
+      ACL: 'public-read',
+    };
+
+    try {
+      const url = await this.s3.getSignedUrlPromise('putObject', params);
+
+      return url;
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException('S3 Presigned URL 생성 실패');
+    }
+  }
 
   applyPagePaginationParamsToQb<T>(qb: SelectQueryBuilder<T>, dto: PagePaginationDto) {
     const { page, take } = dto;
