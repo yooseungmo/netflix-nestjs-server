@@ -14,12 +14,12 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { QueryRunner as QR } from 'typeorm';
-import { AuthGuard } from '../auth/\bguard/auth.guard';
 import { Public } from '../auth/decorator/public.decorator';
 import { RBAC } from '../auth/decorator/rbac.decorator';
+import { AuthGuard } from '../auth/guard/auth.guard';
 import { QueryRunner } from '../common/decorator/query-runner.decorator';
 import { Throttle } from '../common/decorator/throttle.decorator';
-import { TransactionInterceptor } from '../common/interceptor/\btransaction.interceptor';
+import { TransactionInterceptor } from '../common/interceptor/transaction.interceptor';
 import { UserId } from '../user/decorator/user-id.decorator';
 import { Role } from '../user/entities/user.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
