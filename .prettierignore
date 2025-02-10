@@ -1,0 +1,34 @@
+# GitHub Actions 
+.github/workflows/
+
+# 빌드된 파일들
+dist/
+build/
+node_modules/
+
+# 환경 변수 & 설정 파일
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# 로그 파일
+logs/
+*.log
+
+# NestJS Swagger 자동 생성 파일 
+swagger.json
+swagger.yaml
+
+# Jest 테스트 
+coverage/
+
+# Docker
+docker-compose.yml
+Dockerfile
+
+# IDE & OS에서 생성하는 파일
+.vscode/
+.idea/
+.DS_Store

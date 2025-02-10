@@ -1,5 +1,6 @@
 import { Cache, CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager';
 import { NotFoundException } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -37,6 +38,7 @@ describe('MovieService - Integration Test', () => {
           logging: false,
         }),
         TypeOrmModule.forFeature([Movie, MovieDetail, Director, Genre, MovieUserLike, User]),
+        ConfigModule.forRoot(),
       ],
       providers: [MovieService, CommonService],
     }).compile();
